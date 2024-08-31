@@ -81,10 +81,19 @@ function calculateRemainingTime(date) {
     if (diff <= 0) return "Time's up!";
 
     const totalSeconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
+    const days = Math.floor(totalSeconds / (24 * 3600));
+    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    return `${minutes}m ${seconds}s remaining`;
+    // Build the remaining time string conditionally
+    let remainingTime = '';
+    if (days > 0) remainingTime += `${days} days `;
+    if (hours > 0 || days > 0) remainingTime += `${hours} hours `;
+    if (minutes > 0 || hours > 0 || days > 0) remainingTime += `${minutes} minutes `;
+    remainingTime += `${seconds} seconds remaining`;
+
+    return remainingTime.trim();
 }
 
 function updateRemainingTimes() {
