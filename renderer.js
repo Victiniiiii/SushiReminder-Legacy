@@ -28,14 +28,20 @@ function loadReminders() {
 
     reminders.forEach((reminder) => {
         const reminderElement = document.createElement("div");
-        reminderElement.textContent = `${reminder.name} - ${reminder.remainingTime}`;
-
+        reminderElement.id = `reminder-${reminder.name}`; // Assign an ID for later updates
+        reminderElement.dataset.date = reminder.date; // Store the date as a data attribute
+        reminderElement.dataset.name = reminder.name; // Store the name as a data attribute
+        reminderElement.textContent = `${reminder.name} - ${calculateRemainingTime(reminder.date)}`;
+        
         if (reminder.category === "one-time") {
             oneTimeContainer.appendChild(reminderElement);
         } else if (reminder.category === "repeated") {
             repeatedContainer.appendChild(reminderElement);
         }
     });
+
+    // Update remaining times every second
+    setInterval(updateRemainingTimes, 1000);
 }
 
 function saveReminder() {
@@ -47,7 +53,6 @@ function saveReminder() {
         name: reminderName,
         category: reminderCategory,
         date: reminderDate,
-        remainingTime: calculateRemainingTime(reminderDate),
     };
 
     let reminders = [];
@@ -72,8 +77,23 @@ function calculateRemainingTime(date) {
     const targetDate = new Date(date);
     const now = new Date();
     const diff = targetDate - now;
-    const minutes = Math.floor(diff / 1000 / 60);
-    return `${minutes} minutes remaining`;
+
+    if (diff <= 0) return "Time's up!";
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}m ${seconds}s remaining`;
+}
+
+function updateRemainingTimes() {
+    const reminderElements = document.querySelectorAll('[id^="reminder-"]');
+    reminderElements.forEach(element => {
+        const reminderDate = element.dataset.date;
+        const reminderName = element.dataset.name;
+        element.textContent = `${reminderName} - ${calculateRemainingTime(reminderDate)}`;
+    });
 }
 
 function openTab(event, tabName) {
