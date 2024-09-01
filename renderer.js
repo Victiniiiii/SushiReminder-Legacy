@@ -82,6 +82,7 @@ function loadReminders() {
 		deleteButton.textContent = "Delete";
 		deleteButton.className = "delete-button";
 		deleteButton.onclick = () => deleteReminder(index);
+        reminderElement.appendChild(deleteButton);
 
 		const reminderText = document.createElement("span");
 		if (reminder.category === "repeated") {
@@ -101,7 +102,6 @@ function loadReminders() {
 			reminderText.textContent = `${reminder.name} - ${calculateRemainingTime(reminder.date)}`;
 		}
 
-		reminderElement.appendChild(deleteButton);
 		reminderElement.appendChild(reminderText);
 
 		if (reminder.category === "one-time") {

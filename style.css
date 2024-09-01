@@ -153,8 +153,8 @@ button.close-btn:hover {
 	margin: 10px 0;
 }
 
-.repeated-container input[type="checkbox"] {
-	margin-right: 5px;
+.completed-checkbox {
+	margin-right: 10px;
 }
 
 .delete-button {
