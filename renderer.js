@@ -1,16 +1,16 @@
 const fs = require("fs");
 const path = require("path");
+const remindersPath = path.join(__dirname, "reminders.json");
 
 document.addEventListener("DOMContentLoaded", () => {
     loadReminders();
-    document.querySelector(".tab-button").click(); // Default to the first tab
-
+    document.querySelector(".tab-button").click();
     document.getElementById("createReminderBtn").addEventListener("click", showModal);
     document.querySelector(".close").addEventListener("click", closeModal);
-    document.getElementById("settingsBtn").addEventListener("click", () => openTab(event, 'settings'));
+    document.getElementById("settingsBtn").addEventListener("click", () => openTab(event, 'settings'));    
+    document.getElementById("saveReminderBtn").addEventListener("click", saveReminder);
+    document.getElementById("reminderCategory").addEventListener("change", toggleDateTime);
 });
-
-const remindersPath = path.join(__dirname, "reminders.json");
 
 function loadReminders() {
     let reminders = [];
@@ -23,18 +23,17 @@ function loadReminders() {
     const oneTimeContainer = document.getElementById("oneTimeReminders");
     const repeatedContainer = document.getElementById("repeatedReminders");
 
-    // Clear existing reminders
     oneTimeContainer.innerHTML = "";
     repeatedContainer.innerHTML = "";
 
     reminders.forEach((reminder) => {
         const reminderElement = document.createElement("div");
-        reminderElement.id = `reminder-${reminder.name}`; // Assign an ID for later updates
-        reminderElement.dataset.date = reminder.date; // Store the date as a data attribute
-        reminderElement.dataset.name = reminder.name; // Store the name as a data attribute
-        reminderElement.dataset.category = reminder.category; // Store the category as a data attribute
-        reminderElement.dataset.days = reminder.daysOfWeek ? reminder.daysOfWeek.join(',') : null; // Store days of week if any
-        reminderElement.dataset.time = reminder.time; // Store time if any
+        reminderElement.id = `reminder-${reminder.name}`;
+        reminderElement.dataset.date = reminder.date;
+        reminderElement.dataset.name = reminder.name;
+        reminderElement.dataset.category = reminder.category;
+        reminderElement.dataset.days = reminder.daysOfWeek ? reminder.daysOfWeek.join(',') : null;
+        reminderElement.dataset.time = reminder.time;
 
         if (reminder.category === "repeated") {
             reminderElement.textContent = `${reminder.name} - ${calculateRemainingTimeForRepeated(reminder.daysOfWeek, reminder.time)}`;
@@ -49,16 +48,14 @@ function loadReminders() {
         }
     });
 
-    // Update remaining times every second
     setInterval(updateRemainingTimes, 1000);
 }
 
 function saveReminder() {
     const reminderName = document.getElementById("reminderName").value;
     const reminderCategory = document.getElementById("reminderCategory").value;
-
-    let reminderDate = document.getElementById("reminderDate").value;
-    let reminderTime = document.getElementById("reminderTime").value;
+    const reminderDate = document.getElementById("reminderDate").value;
+    const reminderTime = document.getElementById("reminderTime").value;
 
     let daysOfWeek = [];
     if (reminderCategory === "repeated") {
@@ -72,7 +69,7 @@ function saveReminder() {
         name: reminderName,
         category: reminderCategory,
         date: reminderCategory === "one-time" ? `${reminderDate}T${reminderTime}` : null,
-        time: reminderTime, // Store time for repeated reminders
+        time: reminderTime,
         daysOfWeek: reminderCategory === "repeated" ? daysOfWeek : null
     };
 
@@ -91,7 +88,7 @@ function saveReminder() {
     }
 
     closeModal();
-    loadReminders(); // Refresh UI after saving
+    loadReminders();
 }
 
 function calculateRemainingTime(date) {
@@ -107,7 +104,6 @@ function calculateRemainingTime(date) {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    // Build the remaining time string conditionally
     let remainingTime = '';
     if (days > 0) remainingTime += `${days} days `;
     if (hours > 0 || days > 0) remainingTime += `${hours} hours `;
@@ -148,7 +144,6 @@ function calculateRemainingTimeForRepeated(daysOfWeek, time) {
     });
 
     if (closestTimeDiff <= 0) {
-        // If the closest time is already past, calculate the next occurrence
         closestDate.setDate(closestDate.getDate() + 7);
         closestTimeDiff = closestDate - now;
     }
@@ -200,6 +195,20 @@ function showModal() {
 function closeModal() {
     const modal = document.getElementById("reminderModal");
     modal.style.display = "none";
+}
+
+function toggleDateTime() {
+    const category = document.getElementById("reminderCategory").value;
+    const dateTimeFields = document.querySelector(".datetime-container");
+    const repeatedFields = document.querySelector(".repeated-container");
+
+    if (category === "repeated") {
+        dateTimeFields.style.display = "none";
+        repeatedFields.style.display = "block";
+    } else {
+        dateTimeFields.style.display = "flex";
+        repeatedFields.style.display = "none";
+    }
 }
 
 window.onclick = function(event) {

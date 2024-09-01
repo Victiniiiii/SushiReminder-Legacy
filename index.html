@@ -29,34 +29,37 @@
 				<p>Settings content will go here.</p>
 			</div>
 			<!-- Modal -->
-<!-- Modal -->
-<div id="reminderModal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Create Reminder</h2>
-        <input type="text" id="reminderName" placeholder="Reminder Name">
-        <select id="reminderCategory" onchange="toggleDateTime()">
-            <option value="one-time">One-Time</option>
-            <option value="repeated">Repeated</option>
-        </select>
-        <div id="dateTimeFields" class="datetime-container">
-            <input type="date" id="reminderDate" placeholder="Date">
-            <input type="time" id="reminderTime" placeholder="Time">
-        </div>
-        <div id="repeatedFields" class="datetime-container" style="display:none;">
-            <label><input type="checkbox" name="days" value="Monday"> Monday</label>
-            <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
-            <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
-            <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
-            <label><input type="checkbox" name="days" value="Friday"> Friday</label>
-            <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
-            <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
-            <input type="time" id="repeatTime" placeholder="Repeat Time">
-        </div>
-        <button onclick="saveReminder()">Save Reminder</button>
-    </div>
-</div>
+			<div id="reminderModal">
+				<div class="modal-content">
+					<span class="close" onclick="closeModal()">&times;</span>
+					<h2>Create Reminder</h2>
+					<input type="text" id="reminderName" placeholder="Reminder Name" />
+					<select id="reminderCategory">
+						<option value="one-time">One-time</option>
+						<option value="repeated">Repeated</option>
+					</select>
 
+					<!-- Date and Time for One-time Reminders -->
+					<div class="datetime-container">
+						<input type="date" id="reminderDate" />
+						<input type="time" id="reminderTime" />
+					</div>
+
+					<!-- Days of the Week for Repeated Reminders -->
+					<div class="repeated-container" style="display: none">
+						<label><input type="checkbox" name="days" value="Sunday" /> Sunday</label>
+						<label><input type="checkbox" name="days" value="Monday" /> Monday</label>
+						<label><input type="checkbox" name="days" value="Tuesday" /> Tuesday</label>
+						<label><input type="checkbox" name="days" value="Wednesday" /> Wednesday</label>
+						<label><input type="checkbox" name="days" value="Thursday" /> Thursday</label>
+						<label><input type="checkbox" name="days" value="Friday" /> Friday</label>
+						<label><input type="checkbox" name="days" value="Saturday" /> Saturday</label>
+						<input type="time" id="reminderTime" />
+					</div>
+
+					<button id="saveReminderBtn">Create Reminder</button>
+				</div>
+			</div>
 		</div>
 		<script src="renderer.js"></script>
 	</body>
