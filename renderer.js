@@ -37,6 +37,11 @@ function validateReminder(name, category, date, time, time2, daysOfWeek) {
 		return false;
 	}
 
+    if (name.length > 50) {
+		alert("Please enter a shorter reminder name.");
+		return false;
+	}
+
     if ((category === "one-time" && !time) || (category === "repeated" && !time2)) {
         alert("Time is required.");
         return false;
