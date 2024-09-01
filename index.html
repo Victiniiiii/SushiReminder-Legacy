@@ -17,7 +17,6 @@
 				<button class="tab-button" id="createReminderBtn">Create Reminder</button>
 				<button class="tab-button" id="settingsBtn" onclick="openTab(event, 'settings')">Settings</button>
 			</div>
-
 			<div id="oneTime" class="tab-content">
 				<div id="oneTimeReminders"></div>
 			</div>
@@ -28,7 +27,6 @@
 				<h2>Settings</h2>
 				<p>Settings content will go here.</p>
 			</div>
-			<!-- Modal -->
 			<div id="reminderModal">
 				<div class="modal-content">
 					<span class="close" onclick="closeModal()">&times;</span>
@@ -38,14 +36,10 @@
 						<option value="one-time">One-time</option>
 						<option value="repeated">Repeated</option>
 					</select>
-
-					<!-- Date and Time for One-time Reminders -->
 					<div class="datetime-container">
 						<input type="date" id="reminderDate" />
-						<input type="time" id="reminderTime" />
+						<input type="time" id="reminderDateTime" />
 					</div>
-
-					<!-- Days of the Week for Repeated Reminders -->
 					<div class="repeated-container" style="display: none">
 						<label><input type="checkbox" name="days" value="Sunday" /> Sunday</label>
 						<label><input type="checkbox" name="days" value="Monday" /> Monday</label>
@@ -54,9 +48,8 @@
 						<label><input type="checkbox" name="days" value="Thursday" /> Thursday</label>
 						<label><input type="checkbox" name="days" value="Friday" /> Friday</label>
 						<label><input type="checkbox" name="days" value="Saturday" /> Saturday</label>
-						<input type="time" id="reminderTime" />
+						<input type="time" id="reminderRepeatedTime" />
 					</div>
-
 					<button id="saveReminderBtn">Create Reminder</button>
 				</div>
 			</div>

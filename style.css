@@ -156,3 +156,18 @@ button.close-btn:hover {
 .repeated-container input[type="checkbox"] {
 	margin-right: 5px;
 }
+
+.delete-button {
+	background-color: #ff4c4c;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	margin-right: 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 0.9em;
+}
+
+.delete-button:hover {
+	background-color: #ff0000;
+}
