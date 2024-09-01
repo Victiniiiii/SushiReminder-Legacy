@@ -171,3 +171,21 @@ button.close-btn:hover {
 .delete-button:hover {
 	background-color: #ff0000;
 }
+
+::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #2c2c2c; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555; /* Scrollbar color */
+    border-radius: 10px; /* Roundness of the scrollbar */
+    border: 2px solid #2c2c2c; /* Creates padding around scrollbar */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #888; /* Scrollbar color on hover */
+}
