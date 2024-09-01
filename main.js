@@ -6,9 +6,9 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true, // Enable node integration in the renderer
-            contextIsolation: false, // Disable context isolation
-            sandbox: false, // Disable sandboxing
+            nodeIntegration: true,
+            contextIsolation: false,
+            sandbox: false,
         },
     });
 

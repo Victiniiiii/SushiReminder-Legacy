@@ -7,45 +7,57 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<div class="tabs">
-			<button class="tab-button" onclick="openTab(event, 'oneTimeTab')">One-Time Reminders</button>
-			<button class="tab-button" onclick="openTab(event, 'repeatedTab')">Repeated Reminders</button>
-		</div>
-
-		<div id="oneTimeTab" class="tab-content">
-			<h3>One-Time Reminders</h3>
-			<div id="oneTimeReminders"></div>
-		</div>
-
-		<div id="repeatedTab" class="tab-content">
-			<h3>Repeated Reminders</h3>
-			<div id="repeatedReminders"></div>
-		</div>
-
-		<button id="createReminderBtn">Create Reminder</button>
-
-		<div id="reminderModal" class="modal">
-			<div class="modal-content">
-				<span class="close-btn" onclick="closeModal()">&times;</span>
-				<h2>Create Reminder</h2>
-				<label for="reminderName">Name:</label>
-				<input type="text" id="reminderName" /><br />
-				<label for="reminderCategory">Category:</label>
-				<select id="reminderCategory">
-					<option value="one-time">One-Time</option>
-					<option value="repeated">Repeated</option></select
-				><br />
-				<label for="reminderDate">Date:</label>
-				<input type="datetime-local" id="reminderDate" /><br />
-				<label for="reminderRepeat">Repeat:</label>
-				<select id="reminderRepeat" disabled>
-					<option value="daily">Daily</option>
-					<option value="weekly">Weekly</option></select
-				><br />
-				<button onclick="saveReminder()">Save Reminder</button>
+		<header>
+			<h1>Reminder App</h1>
+		</header>
+		<div class="container">
+			<div class="tab-container">
+				<button class="tab-button" onclick="openTab(event, 'oneTime')">One-Time Reminders</button>
+				<button class="tab-button" onclick="openTab(event, 'repeated')">Repeated Reminders</button>
+				<button class="tab-button" id="createReminderBtn">Create Reminder</button>
+				<button class="tab-button" id="settingsBtn" onclick="openTab(event, 'settings')">Settings</button>
 			</div>
-		</div>
 
+			<div id="oneTime" class="tab-content">
+				<div id="oneTimeReminders"></div>
+			</div>
+			<div id="repeated" class="tab-content">
+				<div id="repeatedReminders"></div>
+			</div>
+			<div id="settings" class="tab-content">
+				<h2>Settings</h2>
+				<p>Settings content will go here.</p>
+			</div>
+			<!-- Modal -->
+<!-- Modal -->
+<div id="reminderModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Create Reminder</h2>
+        <input type="text" id="reminderName" placeholder="Reminder Name">
+        <select id="reminderCategory" onchange="toggleDateTime()">
+            <option value="one-time">One-Time</option>
+            <option value="repeated">Repeated</option>
+        </select>
+        <div id="dateTimeFields" class="datetime-container">
+            <input type="date" id="reminderDate" placeholder="Date">
+            <input type="time" id="reminderTime" placeholder="Time">
+        </div>
+        <div id="repeatedFields" class="datetime-container" style="display:none;">
+            <label><input type="checkbox" name="days" value="Monday"> Monday</label>
+            <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
+            <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
+            <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
+            <label><input type="checkbox" name="days" value="Friday"> Friday</label>
+            <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
+            <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
+            <input type="time" id="repeatTime" placeholder="Repeat Time">
+        </div>
+        <button onclick="saveReminder()">Save Reminder</button>
+    </div>
+</div>
+
+		</div>
 		<script src="renderer.js"></script>
 	</body>
 </html>

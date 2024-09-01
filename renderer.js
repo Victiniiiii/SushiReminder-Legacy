@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".tab-button").click(); // Default to the first tab
 
     document.getElementById("createReminderBtn").addEventListener("click", showModal);
-    document.querySelector(".close-btn").addEventListener("click", closeModal);
+    document.querySelector(".close").addEventListener("click", closeModal);
+    document.getElementById("settingsBtn").addEventListener("click", () => openTab(event, 'settings'));
 });
 
 const remindersPath = path.join(__dirname, "reminders.json");
@@ -31,8 +32,16 @@ function loadReminders() {
         reminderElement.id = `reminder-${reminder.name}`; // Assign an ID for later updates
         reminderElement.dataset.date = reminder.date; // Store the date as a data attribute
         reminderElement.dataset.name = reminder.name; // Store the name as a data attribute
-        reminderElement.textContent = `${reminder.name} - ${calculateRemainingTime(reminder.date)}`;
-        
+        reminderElement.dataset.category = reminder.category; // Store the category as a data attribute
+        reminderElement.dataset.days = reminder.daysOfWeek ? reminder.daysOfWeek.join(',') : null; // Store days of week if any
+        reminderElement.dataset.time = reminder.time; // Store time if any
+
+        if (reminder.category === "repeated") {
+            reminderElement.textContent = `${reminder.name} - ${calculateRemainingTimeForRepeated(reminder.daysOfWeek, reminder.time)}`;
+        } else {
+            reminderElement.textContent = `${reminder.name} - ${calculateRemainingTime(reminder.date)}`;
+        }
+
         if (reminder.category === "one-time") {
             oneTimeContainer.appendChild(reminderElement);
         } else if (reminder.category === "repeated") {
@@ -47,12 +56,24 @@ function loadReminders() {
 function saveReminder() {
     const reminderName = document.getElementById("reminderName").value;
     const reminderCategory = document.getElementById("reminderCategory").value;
-    const reminderDate = document.getElementById("reminderDate").value;
+
+    let reminderDate = document.getElementById("reminderDate").value;
+    let reminderTime = document.getElementById("reminderTime").value;
+
+    let daysOfWeek = [];
+    if (reminderCategory === "repeated") {
+        const checkboxes = document.querySelectorAll('input[name="days"]:checked');
+        checkboxes.forEach(checkbox => {
+            daysOfWeek.push(checkbox.value);
+        });
+    }
 
     const newReminder = {
         name: reminderName,
         category: reminderCategory,
-        date: reminderDate,
+        date: reminderCategory === "one-time" ? `${reminderDate}T${reminderTime}` : null,
+        time: reminderTime, // Store time for repeated reminders
+        daysOfWeek: reminderCategory === "repeated" ? daysOfWeek : null
     };
 
     let reminders = [];
@@ -96,12 +117,63 @@ function calculateRemainingTime(date) {
     return remainingTime.trim();
 }
 
+function calculateRemainingTimeForRepeated(daysOfWeek, time) {
+    const now = new Date();
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    
+    const currentDay = dayNames[now.getDay()];
+    const currentTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+    const targetTimeParts = time.split(':');
+    const targetHour = parseInt(targetTimeParts[0], 10);
+    const targetMinute = parseInt(targetTimeParts[1], 10);
+    const targetTime = targetHour * 3600 + targetMinute * 60;
+
+    let closestTimeDiff = Infinity;
+    let closestDate = null;
+
+    daysOfWeek.forEach(day => {
+        const dayIndex = dayNames.indexOf(day);
+        const dayDiff = (dayIndex - now.getDay() + 7) % 7;
+        const targetDate = new Date(now);
+        targetDate.setDate(now.getDate() + dayDiff);
+        targetDate.setHours(targetHour, targetMinute, 0, 0);
+
+        const diff = targetDate - now;
+
+        if (diff < closestTimeDiff) {
+            closestTimeDiff = diff;
+            closestDate = targetDate;
+        }
+    });
+
+    if (closestTimeDiff <= 0) {
+        // If the closest time is already past, calculate the next occurrence
+        closestDate.setDate(closestDate.getDate() + 7);
+        closestTimeDiff = closestDate - now;
+    }
+
+    return calculateRemainingTime(closestDate);
+}
+
 function updateRemainingTimes() {
     const reminderElements = document.querySelectorAll('[id^="reminder-"]');
     reminderElements.forEach(element => {
         const reminderDate = element.dataset.date;
         const reminderName = element.dataset.name;
-        element.textContent = `${reminderName} - ${calculateRemainingTime(reminderDate)}`;
+        const reminderCategory = element.dataset.category;
+        const daysOfWeek = element.dataset.days ? element.dataset.days.split(',') : [];
+        const time = element.dataset.time;
+
+        let remainingTime = "";
+
+        if (reminderCategory === "repeated") {
+            remainingTime = calculateRemainingTimeForRepeated(daysOfWeek, time);
+        } else {
+            remainingTime = calculateRemainingTime(reminderDate);
+        }
+
+        element.textContent = `${reminderName} - ${remainingTime}`;
     });
 }
 
