@@ -1,10 +1,12 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
 
 function createWindow() {
-	const win = new BrowserWindow({
+	const mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
+        title: "SushiReminder",
+        icon: path.join('sushilogo16.png'),
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -12,10 +14,12 @@ function createWindow() {
 		},
 	});
 
-	win.loadFile("index.html");
+	mainWindow .loadFile("index.html");
 }
 
 app.whenReady().then(() => {
+    Menu.setApplicationMenu(null);
+    app.setName("SushiReminder");
 	createWindow();
 
 	app.on("activate", () => {

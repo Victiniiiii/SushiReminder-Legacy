@@ -1,16 +1,36 @@
 {
-  "name": "reminderapp",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "electron": "^32.0.1"
+    "name": "sushireminder",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Victiniiiii",
+    "build": {
+      "productName": "SushiReminder",
+      "icon": "sushilogo",
+      "files": [
+        "src/**/*",
+        "node_modules/**/*",
+        "package.json",
+        "reminders.json"
+      ],
+      "directories": {
+        "buildResources": "build"
+      },
+      "win": {
+        "icon": "sushilogo.ico"
+      },
+      "mac": {
+        "icon": "sushilogo.icns"
+      },
+      "linux": {
+        "icon": ""
+      }
+    },
+    "scripts": {
+      "start": "electron .",
+      "dist": "electron-builder"
+    },
+    "devDependencies": {
+        "electron": "^31.1.0"
+    }
   }
-}
+  
